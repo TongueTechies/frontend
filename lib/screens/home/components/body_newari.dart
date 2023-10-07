@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tongue_techies_frontend/components/drawer.dart';
 import 'package:tongue_techies_frontend/helpers/constants.dart';
 import 'package:tongue_techies_frontend/helpers/snackbar.dart';
@@ -20,6 +22,20 @@ class _BodyNewState extends State<BodyNew> {
   bool isLoading = false;
   Errors? errors;
   TextEditingController _textEditingController = TextEditingController();
+  bool _isLoggedIn = false;
+
+  Future<void> checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.containsKey("accessToken");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
 
   void _handleTranslate() async {
     String text = _textEditingController.text;
@@ -72,6 +88,20 @@ class _BodyNewState extends State<BodyNew> {
           title: const Text("Nepal Bhasa to English"),
           centerTitle: true,
           backgroundColor: kPrimaryColor,
+          actions: <Widget>[
+            if (_isLoggedIn)
+              IconButton(
+                icon: Icon(Icons.logout),
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.remove('accessToken');
+                  Get.off(() => const HomeScreenEn());
+                  generateSuccessSnackbar(
+                      "Success", "User logged out successfully!");
+                },
+              ),
+          ],
         ),
         drawer: makeDrawer(context),
         body: SingleChildScrollView(

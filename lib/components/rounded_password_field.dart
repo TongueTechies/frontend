@@ -6,9 +6,11 @@ class RoundedPasswordField extends StatefulWidget {
   const RoundedPasswordField({
     Key? key,
     required this.onChanged,
+    required this.controller,
   }) : super(key: key);
 
   final ValueChanged<String> onChanged;
+  final TextEditingController controller;
 
   @override
   _RoundedPasswordFieldState createState() => _RoundedPasswordFieldState();
@@ -21,6 +23,7 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        controller: widget.controller,
         onChanged: widget.onChanged,
         obscureText:
             !isPasswordVisible, // Toggle obscureText based on visibility state

@@ -24,7 +24,11 @@ class _NewsState extends State<News> {
         future: _apiService.getNews(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              backgroundColor: kPrimaryColor,
+              color: Colors.white,
+            ));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error loading news'));
           } else if (snapshot.hasData && snapshot.data is NewsModel) {

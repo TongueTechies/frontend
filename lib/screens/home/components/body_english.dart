@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tongue_techies_frontend/components/drawer.dart';
 import 'package:tongue_techies_frontend/helpers/constants.dart';
 import 'package:tongue_techies_frontend/helpers/snackbar.dart';
 import 'package:tongue_techies_frontend/models/error.models.dart';
 import 'package:tongue_techies_frontend/models/success.models.dart';
 import 'package:tongue_techies_frontend/models/translation.models.dart';
+import 'package:tongue_techies_frontend/screens/home/home_screen_english.dart';
 import 'package:tongue_techies_frontend/screens/home/home_screen_newari.dart';
 import 'package:tongue_techies_frontend/services/translation.service.dart';
 
@@ -22,6 +25,21 @@ class _BodyEnState extends State<BodyEn> {
   Errors? errors;
   TextEditingController _textEditingController = TextEditingController();
   AudioPlayer _audioPlayer = AudioPlayer();
+
+  bool _isLoggedIn = false;
+
+  Future<void> checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.containsKey("accessToken");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
 
   void _handleTranslate() async {
     String text = _textEditingController.text;
@@ -92,6 +110,19 @@ class _BodyEnState extends State<BodyEn> {
         title: const Text("English to Nepal Bhasa"),
         centerTitle: true,
         backgroundColor: kPrimaryColor,
+        actions: <Widget>[
+          if (_isLoggedIn)
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.remove('accessToken');
+                Get.off(() => const HomeScreenEn());
+                generateSuccessSnackbar(
+                    "Success", "User logged out successfully!");
+              },
+            ),
+        ],
       ),
       drawer: makeDrawer(context),
       body: SingleChildScrollView(
