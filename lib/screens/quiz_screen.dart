@@ -97,8 +97,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   },
                   child: Text(_questions[_currentQuestionIndex]['options'][0]),
                   style: ElevatedButton.styleFrom(
-                    primary: kButtonColor,
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: kButtonColor,
                   ),
                 ),
                 ElevatedButton(
@@ -107,8 +107,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   },
                   child: Text(_questions[_currentQuestionIndex]['options'][1]),
                   style: ElevatedButton.styleFrom(
-                    primary: kButtonColor,
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: kButtonColor,
                   ),
                 ),
               ],
@@ -123,8 +123,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   },
                   child: Text(_questions[_currentQuestionIndex]['options'][2]),
                   style: ElevatedButton.styleFrom(
-                    primary: kButtonColor,
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: kButtonColor,
                   ),
                 ),
                 ElevatedButton(
@@ -133,8 +133,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   },
                   child: Text(_questions[_currentQuestionIndex]['options'][3]),
                   style: ElevatedButton.styleFrom(
-                    primary: kButtonColor,
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: kButtonColor,
                   ),
                 ),
               ],
