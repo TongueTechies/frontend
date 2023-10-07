@@ -4,6 +4,7 @@ import 'package:tongue_techies_frontend/screens/home/components/body_english.dar
 import 'package:tongue_techies_frontend/screens/news_screen.dart';
 import 'package:tongue_techies_frontend/screens/profile_screen.dart';
 import 'package:tongue_techies_frontend/screens/quiz_screen.dart';
+import 'package:camera/camera.dart';
 
 class HomeScreenEn extends StatefulWidget {
   const HomeScreenEn({Key? key}) : super(key: key);
@@ -14,8 +15,24 @@ class HomeScreenEn extends StatefulWidget {
 
 class _HomeScreenEnState extends State<HomeScreenEn> {
   int pageIndex = 0;
+  late CameraController _cameraController;
 
-  final pages = [const BodyEn(), News(), QuizScreen(), const ProfileScreen()];
+  final pages = [const BodyEn(), News(), QuizScreen(), ProfileScreen()];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCamera();
+  }
+
+  void _initializeCamera() async {
+    final cameras = await availableCameras();
+    _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    await _cameraController.initialize();
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   void onItemTapped(int index) {
     setState(() {
@@ -29,8 +46,9 @@ class _HomeScreenEnState extends State<HomeScreenEn> {
       body: pages[pageIndex],
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-            canvasColor: kPrimaryColor,
-            textTheme: Theme.of(context).textTheme.copyWith()),
+          canvasColor: kPrimaryColor,
+          textTheme: Theme.of(context).textTheme.copyWith(),
+        ),
         child: BottomNavigationBar(
           unselectedItemColor: Colors.white.withOpacity(0.6),
           currentIndex: pageIndex,
@@ -60,7 +78,23 @@ class _HomeScreenEnState extends State<HomeScreenEn> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Handle camera button tap
+          if (_cameraController.value.isInitialized) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: AppBar(
+                    title: Text('Camera Preview'),
+                    backgroundColor: kPrimaryColor,
+                    centerTitle: true,
+                  ),
+                  body: Center(
+                    child: CameraPreview(_cameraController),
+                  ),
+                ),
+              ),
+            );
+          }
         },
         child: Icon(
           Icons.camera_alt,
@@ -70,5 +104,11 @@ class _HomeScreenEnState extends State<HomeScreenEn> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
   }
 }

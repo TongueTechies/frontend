@@ -15,7 +15,7 @@ class HomeScreenNew extends StatefulWidget {
 class _HomeScreenNewState extends State<HomeScreenNew> {
   int pageIndex = 0;
 
-  final pages = [const BodyNew(), News(), QuizScreen(), const ProfileScreen()];
+  final pages = [const BodyNew(), News(), QuizScreen(), ProfileScreen()];
 
   void onItemTapped(int index) {
     setState(() {
