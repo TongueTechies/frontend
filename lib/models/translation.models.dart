@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-TranslationModel translationModelFromJson(String str) =>
+TranslationModels translationModelFromJson(String str) =>
     TranslationModel.fromJson(json.decode(str));
 
 String translationModelToJson(TranslationModel data) =>
