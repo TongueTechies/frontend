@@ -13,4 +13,5 @@ class ApiConstants {
   static String loginUrl = "api/auth/login/";
   static String registerUrl = "api/auth/register/";
   static String profileUrl = "api/auth/profile/";
+  static String savedTranslationUrl = "api/translation/saved-translations/";
 }

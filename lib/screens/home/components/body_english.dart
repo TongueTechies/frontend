@@ -41,6 +41,23 @@ class _BodyEnState extends State<BodyEn> {
     checkLoginStatus();
   }
 
+  Future<void> saveTranslations() async {
+    try {
+      print(_textEditingController.text);
+      print(translation);
+      dynamic result = await TranslationAPIService()
+          .saveTranslation(_textEditingController.text, translation);
+
+      if (result is Success) {
+        generateSuccessSnackbar("Success", result.message);
+      } else if (result is Errors) {
+        generateErrorSnackbar("Error", result.message);
+      }
+    } catch (e) {
+      generateErrorSnackbar("Error", e.toString());
+    }
+  }
+
   void _handleTranslate() async {
     String text = _textEditingController.text;
     setState(() {
@@ -336,33 +353,34 @@ class _BodyEnState extends State<BodyEn> {
                 padding: EdgeInsets.only(right: horizontalPadding),
                 child: Align(
                   alignment: Alignment.center,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle save translation action
-                    },
-                    child: Text('Save Translation',
-                        style: TextStyle(color: Colors.white)),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(kButtonColor),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                      // Add shadow to the button
-                      elevation: MaterialStateProperty.all(5),
-                      shadowColor: MaterialStateProperty.all(kPrimaryColor),
-                      // Add highlight to the button
-                      overlayColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed))
-                            return kButtonColor.withOpacity(0.5);
-                          return kButtonColor; // Use the component's default.
-                        },
-                      ),
-                    ),
-                  ),
+                  child: _isLoggedIn
+                      ? ElevatedButton(
+                          onPressed: saveTranslations,
+                          child: Text('Save Translation',
+                              style: TextStyle(color: Colors.white)),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(kButtonColor),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            elevation: MaterialStateProperty.all(5),
+                            shadowColor:
+                                MaterialStateProperty.all(kPrimaryColor),
+                            overlayColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return kButtonColor.withOpacity(0.5);
+                                return kButtonColor; // Use the component's default.
+                              },
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
               ),
           ],

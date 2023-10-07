@@ -5,6 +5,7 @@ import 'package:tongue_techies_frontend/components/drawer.dart';
 import 'package:tongue_techies_frontend/helpers/constants.dart';
 import 'package:tongue_techies_frontend/helpers/snackbar.dart';
 import 'package:tongue_techies_frontend/models/error.models.dart';
+import 'package:tongue_techies_frontend/models/success.models.dart';
 import 'package:tongue_techies_frontend/models/translation.models.dart';
 import 'package:tongue_techies_frontend/screens/home/components/background.dart';
 import 'package:tongue_techies_frontend/screens/home/home_screen_english.dart';
@@ -29,6 +30,23 @@ class _BodyNewState extends State<BodyNew> {
     setState(() {
       _isLoggedIn = prefs.containsKey("accessToken");
     });
+  }
+
+  Future<void> saveTranslations() async {
+    try {
+      print(_textEditingController.text);
+      print(translation);
+      dynamic result = await TranslationAPIService()
+          .saveTranslation(_textEditingController.text, translation);
+
+      if (result is Success) {
+        generateSuccessSnackbar("Success", result.message);
+      } else if (result is Errors) {
+        generateErrorSnackbar("Error", result.message);
+      }
+    } catch (e) {
+      generateErrorSnackbar("Error", e.toString());
+    }
   }
 
   @override
@@ -296,15 +314,6 @@ class _BodyNewState extends State<BodyNew> {
                               ),
                             ],
                           ),
-                          child: IconButton(
-                            onPressed: () {
-                              // Add your button press logic here
-                            },
-                            icon: Icon(
-                              Icons.volume_up,
-                              color: Colors.white,
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -315,34 +324,34 @@ class _BodyNewState extends State<BodyNew> {
                   padding: EdgeInsets.only(right: horizontalPadding),
                   child: Align(
                     alignment: Alignment.center,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle save translation action
-                      },
-                      child: Text('Save Translation',
-                          style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(kButtonColor),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                        // Add shadow to the button
-                        elevation: MaterialStateProperty.all(5),
-                        shadowColor: MaterialStateProperty.all(kPrimaryColor),
-                        // Add highlight to the button
-                        overlayColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return kButtonColor.withOpacity(0.5);
-                            return kButtonColor; // Use the component's default.
-                          },
-                        ),
-                      ),
-                    ),
+                    child: _isLoggedIn
+                        ? ElevatedButton(
+                            onPressed: saveTranslations,
+                            child: Text('Save Translation',
+                                style: TextStyle(color: Colors.white)),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  kButtonColor),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                              elevation: MaterialStateProperty.all(5),
+                              shadowColor:
+                                  MaterialStateProperty.all(kPrimaryColor),
+                              overlayColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed))
+                                    return kButtonColor.withOpacity(0.5);
+                                  return kButtonColor; // Use the component's default.
+                                },
+                              ),
+                            ),
+                          )
+                        : null,
                   ),
                 ),
             ],
