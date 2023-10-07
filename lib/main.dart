@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tongue_techies_frontend/helpers/constants.dart';
 import 'package:tongue_techies_frontend/screens/welcome/welcome_screen.dart';
 
@@ -17,7 +18,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "IndigeTranslate",
       theme: ThemeData(

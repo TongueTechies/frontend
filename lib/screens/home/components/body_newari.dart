@@ -8,14 +8,14 @@ import 'package:tongue_techies_frontend/screens/home/components/background.dart'
 import 'package:tongue_techies_frontend/screens/home/home_screen_english.dart';
 import 'package:tongue_techies_frontend/services/translation.service.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+class BodyNew extends StatefulWidget {
+  const BodyNew({Key? key}) : super(key: key);
 
   @override
-  State<Body> createState() => _BodyState();
+  State<BodyNew> createState() => _BodyNewState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyNewState extends State<BodyNew> {
   String translation = '';
   bool isLoading = false;
   Errors? errors;
